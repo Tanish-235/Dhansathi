@@ -54,7 +54,7 @@ const HamburgerMenu = ({ isOpen, onClick }) => {
 // Navigation Menu Component
 const NavigationMenu = ({ isOpen, scrollToSection, closeMenu, navigate }) => {
   const navigationItems = [
-    { text: "Tutorial Video", href: "/tutorial", icon: "🎥" },
+    { text: "Tutorial Video", href: "/tutorials", icon: "🎥" },
     { 
       text: "Contact Us", 
       onClick: () => {

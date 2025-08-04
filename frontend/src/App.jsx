@@ -1,6 +1,7 @@
 import React from 'react'
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import Home from './pages/Home.jsx'
+import Tutorial from './pages/Tutorial.jsx'
 import BudgetPlanner from './pages/BudgetPlanner.jsx'
 import RegisterLoginPage from './pages/RegisterLoginPage.jsx'
 import SathiBot from './pages/SathiBot.jsx'
@@ -16,9 +17,9 @@ function App() {
         <Route path="/register" element={<RegisterLoginPage />} />
         <Route path="/chat" element={<SathiBot />} />
         <Route path="/resources" element={<DhansathiResources />} />
+        <Route path="/tutorials" element={<Tutorial />} />
       </Routes>
     </Router>
-
   )
 }
 
