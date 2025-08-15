@@ -1,44 +1,40 @@
 import Tutorial from "../model/tutorial.js";
 
-export const getTut = async (req,res)=>{
-    try{
-        const tuts = await Tutorial.find({})
-        res.status(200).json({success:true,data:tuts})
-    }
-    catch(error){
-        console.log("error in fetching tut",error.message);
-        res.status(500).json({success:false,message:"server error"})
+export const getTut = async (req, res) => {
+    try {
+        const tuts = await Tutorial.find({});
+        // Return array directly for frontend compatibility
+        res.status(200).json(tuts);
+    } catch (error) {
+        console.log("error in fetching tut", error.message);
+        res.status(500).json([]);
     }
 }
 
-export const addTut = async (req,res)=>{
+export const addTut = async (req, res) => {
     const tut = req.body;
-    if(!tut.title || !tut.description || !tut.url){
-        return res.status(400).json({success:false,message:"pls provide all the fields"});
+    if (!tut.title || !tut.description || !tut.url) {
+        return res.status(400).json({ message: "Please provide all the fields" });
     }
     const newTut = new Tutorial(tut);
     try {
-        await newTut.save()
-        res.status(200).json({success:true,data:newTut});
+        await newTut.save();
+        // Return the new tutorial object directly
+        res.status(200).json(newTut);
     } catch (error) {
-        console.log("error in adding Tutorial: ",error.message);
-        res.status(500).json({success:false,message:"server error"});
+        console.log("error in adding Tutorial: ", error.message);
+        res.status(500).json({ message: "server error" });
     }
 }
 
-export const deleteTut = async(req,res)=>{
-    const {id} = req.params
-    console.log("id:",id)
-
-    try{
-
+export const deleteTut = async (req, res) => {
+    const { id } = req.params;
+    try {
         await Tutorial.findByIdAndDelete(id);
-        res.status(200).json({sucess:true,message:"deleted yeah"});
-
-    }catch(error){
-        console.log("error in deleting: ",error.message);
-        res.status(500).json({sucess:false,message:"error while deleting"})
-
+        res.status(200).json({ message: "Deleted successfully" });
+    } catch (error) {
+        console.log("error in deleting: ", error.message);
+        res.status(500).json({ message: "Error while deleting" });
     }
 }
 

@@ -24,8 +24,17 @@ function App() {
             <SathiBot />
           </ProtectedRoute>
         } />
-        <Route path="/resources" element={<DhansathiResources />} />
-        <Route path="/tutorials" element={<Tutorial />} />
+         <Route path="/tutorials" element={
+          <ProtectedRoute>
+            <Tutorial />
+          </ProtectedRoute>
+        } />
+         <Route path="/resources" element={
+          <ProtectedRoute>
+            <DhansathiResources />
+          </ProtectedRoute>
+        } />
+        
       </Routes>
     </Router>
   )
