@@ -1,19 +1,26 @@
-import express from "express";
+import cors from "cors";
 import dotenv from "dotenv";
-import {connectDB} from "./config/db.js"
+import express from "express";
+import connectDB from "./config/db.js"
+import chatRoutes from "./routes/chatRoutes.js";
 import mongoose from "mongoose";
 
 
 dotenv.config();
 
 const app = express();
+app.use(cors({
+    origin: "http://localhost:5173",
+}));
 
 app.use(express.json());
 
-const PORT = process.env.PORT || 5000
+app.use("/api/chat", chatRoutes);
 
-app.listen(5000,()=>{
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
     connectDB();
-    console.log("server is running at" + PORT);
-})
+    console.log("Server is running at port " + PORT);
+});
 
