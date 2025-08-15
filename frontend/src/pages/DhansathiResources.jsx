@@ -1,7 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 
 const DhansathiResources = () => {
+  const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -155,13 +157,21 @@ const DhansathiResources = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Back to Home Page Button - Top Left */}
+      <div className="fixed top-6 left-6 z-50">
+        <button
+          onClick={() => navigate('/')}
+          className="inline-flex items-center text-purple-600 hover:text-purple-800 font-semibold bg-white bg-opacity-80 px-4 py-2 rounded-xl shadow"
+        >
+          ← Back to Home Page
+        </button>
+      </div>
       {/* Header */}
       <header className={`fixed w-full top-0 z-50 transition-all duration-300 ${
         scrolled 
           ? 'bg-gradient-to-r from-purple-700/95 to-purple-600/95 backdrop-blur-lg' 
           : 'bg-gradient-to-r from-purple-700 to-purple-600'
       }`}>
-       <Navbar />
       </header>
 
       {/* Hero Section */}

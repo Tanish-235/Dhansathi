@@ -1,9 +1,11 @@
+import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, Area, AreaChart } from 'recharts';
 import { Calculator, DollarSign, PiggyBank, Home, BookOpen, Utensils, TrendingUp, AlertTriangle, CheckCircle, Target, Download, Moon, Sun, Plus, Minus, Eye, EyeOff, Settings, Award } from 'lucide-react';
 import { Document, Packer, Paragraph, TextRun } from 'docx'; // Added for docx export
 
 const BudgetPlanner = () => {
+  const navigate = useNavigate();
   const [salary, setSalary] = useState('');
   const [hasLoan, setHasLoan] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
@@ -33,6 +35,23 @@ const BudgetPlanner = () => {
   const [currency, setCurrency] = useState('₹');
   const [budgetPeriod, setBudgetPeriod] = useState('monthly');
 
+  // Automatically recalculate EMI when loan details change and hasLoan is true
+  useEffect(() => {
+    if (hasLoan && loanDetails.amount && loanDetails.interestRate && loanDetails.duration) {
+      const principal = parseFloat(loanDetails.amount);
+      const monthlyRate = parseFloat(loanDetails.interestRate) / 100 / 12;
+      const months = parseFloat(loanDetails.duration) * 12;
+      if (monthlyRate === 0) {
+        setEmi(principal / months);
+      } else {
+        const emiValue = (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) /
+          (Math.pow(1 + monthlyRate, months) - 1);
+        setEmi(Math.round(emiValue));
+      }
+    } else {
+      setEmi(0);
+    }
+  }, [hasLoan, loanDetails.amount, loanDetails.interestRate, loanDetails.duration]);
   const availableBudget = parseFloat(salary || 0) - emi;
   const totalAllocated = Object.values(budgetAllocations).reduce((sum, value) => sum + value, 0);
   const remainingBudget = availableBudget - totalAllocated;
@@ -203,6 +222,15 @@ const BudgetPlanner = () => {
 
   return (
     <div className={`min-h-screen transition-all duration-300 ${themeClasses}`}>
+      {/* Back to Home Page Button - Top Left */}
+      <div className="fixed top-6 left-6 z-50">
+        <button
+          onClick={() => navigate('/')}
+          className="inline-flex items-center text-purple-600 hover:text-purple-800 font-semibold bg-white bg-opacity-80 px-4 py-2 rounded-xl shadow"
+        >
+          ← Back to Home Page
+        </button>
+      </div>
       {/* Header */}
       <header className="bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-800 text-white py-8 px-4 shadow-2xl">
         <div className="max-w-7xl mx-auto">

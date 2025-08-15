@@ -1,7 +1,10 @@
+import { useNavigate } from 'react-router-dom';
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Lightbulb, Code, Sun, Moon, Trash2, Bot, User, Edit, Search } from 'lucide-react';
 
 const SathiBot = () => {
+  const navigate = useNavigate();
+
   // --- State ---
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
@@ -113,6 +116,15 @@ const SathiBot = () => {
 
   return (
     <>
+      {/* Back to Home Page Button - Top Left */}
+      <div className="fixed top-6 left-6 z-50">
+        <button
+          onClick={() => navigate('/')}
+          className="inline-flex items-center text-purple-600 hover:text-purple-800 font-semibold bg-white bg-opacity-80 px-4 py-2 rounded-xl shadow"
+        >
+          ← Back to Home Page
+        </button>
+      </div>
       {/* <Navbar /> */}
       <div
         className={`min-h-screen transition-all duration-300 ${
