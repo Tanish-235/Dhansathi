@@ -3,17 +3,18 @@ import mongoose from "mongoose";
 const scheme = new mongoose.Schema({
     title:{
         type:String,
-        require:true
+        required:true
     },
     description:{
         type:String,
-        require:true
+        required:true
     },
     url:{
         type:String,
-        require:true
+        required:true
     }
 })
 
-const tutorial = mongoose.model('tutorial',scheme);
-module.exports = tutorial;
+const Tutorial = mongoose.model('Tutorial', scheme);
+
+export default Tutorial;

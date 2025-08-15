@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@clerk/clerk-react": "^5.42.1",
     "docx": "^9.5.1",
     "lucide-react": "^0.526.0",
     "npm": "^11.5.2",

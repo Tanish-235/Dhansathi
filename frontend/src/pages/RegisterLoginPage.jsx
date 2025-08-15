@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Navbar from '../components/Navbar.jsx';
 import { User, Mail, Lock, Upload, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 
@@ -54,7 +54,7 @@ const RegisterLoginPage = () => {
     // Handle form submission logic here
     console.log('Form submitted:', formData);
     // Redirect to home page
-    window.location.href = '/home';
+    window.location.href = '/';
   };
 
   const toggleMode = () => {
