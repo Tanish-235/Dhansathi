@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
 
 // Navigation Button Component
 const NavButton = ({ text, href, onClick, className = '', navigate }) => {
@@ -65,15 +66,14 @@ const NavigationMenu = ({ isOpen, scrollToSection, closeMenu, navigate }) => {
     },
     { text: "Resources", href: "/resources", icon: "📚" },
     { text: "Sathi bot", href: "/chat", icon: "🤖" },
-    { text: "Budget Planner", href: "/budgetplan", icon: "💰" },
-    { text: "Register", href: "/register", icon: "✨", isSpecial: true }
+    { text: "Budget Planner", href: "/budgetplan", icon: "💰" }
   ];
 
   return (
     <nav className={`
       ${isOpen ? 'flex opacity-100 translate-y-0' : 'hidden opacity-0 -translate-y-4'} 
       md:flex md:opacity-100 md:translate-y-0
-      flex-col md:flex-row md:space-x-2 
+      flex-col md:flex-row md:space-x-4 
       absolute md:static top-full left-0 w-full md:w-auto 
       bg-purple-900/98 md:bg-transparent 
       backdrop-blur-lg md:backdrop-blur-none
@@ -92,22 +92,46 @@ const NavigationMenu = ({ isOpen, scrollToSection, closeMenu, navigate }) => {
         >
           <NavButton
             text={
-              <span className="flex items-center gap-2 md:gap-1">
-                <span className="text-sm md:text-xs opacity-80">{item.icon}</span>
+              <span className="flex items-center gap-2">
+                <span className="text-sm opacity-80">{item.icon}</span>
                 {item.text}
-                {item.isSpecial && (
-                  <span className="inline-block w-2 h-2 bg-orange-300 rounded-full animate-pulse"></span>
-                )}
               </span>
             }
             href={item.href}
             onClick={item.onClick}
-            className={`block w-full text-left md:text-center md:w-auto mb-2 md:mb-0
-                       ${item.isSpecial ? 'bg-gradient-to-r from-orange-400/20 to-purple-600/20 md:bg-none border-orange-300/50' : ''}`}
+            className="block w-full text-left md:text-center md:w-auto mb-3 md:mb-0"
             navigate={navigate}
           />
         </div>
       ))}
+      
+                    {/* Clerk Authentication Buttons */}
+       <div className="flex flex-col md:flex-row md:space-x-3 space-y-3 md:space-y-0 mt-4 md:mt-0">
+         <SignedOut>
+           <SignInButton mode="modal">
+             <button className="w-full md:w-auto bg-gradient-to-r from-orange-400 to-purple-600 hover:from-orange-500 hover:to-purple-700 
+                              text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 
+                              hover:scale-105 active:scale-95 transform shadow-lg hover:shadow-orange-500/25
+                              border border-orange-300/20 hover:border-orange-300/40">
+               <span className="flex items-center gap-2">
+                 <span className="text-base">🔐</span>
+                 Sign In
+               </span>
+             </button>
+           </SignInButton>
+         </SignedOut>
+         <SignedIn>
+           <div className="flex items-center justify-center md:justify-start">
+             <UserButton 
+               appearance={{
+                 elements: {
+                   avatarBox: "w-12 h-12 md:w-10 md:h-10"
+                 }
+               }}
+             />
+           </div>
+         </SignedIn>
+       </div>
     </nav>
   );
 };
@@ -130,7 +154,7 @@ const Navbar = ({ isScrolled, isMenuOpen, toggleMenu, scrollToSection }) => {
       }
     `}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4 md:py-5">
+        <div className="flex justify-between items-center py-4 md:py-6">
           {/* Logo/Brand */}
           <div className="flex items-center group">
             <div className="relative">
@@ -139,16 +163,16 @@ const Navbar = ({ isScrolled, isMenuOpen, toggleMenu, scrollToSection }) => {
                          hover:text-orange-300 transition-all duration-300 cursor-pointer
                          transform hover:scale-105 active:scale-95
                          bg-gradient-to-r from-white to-orange-100 bg-clip-text text-transparent
-                         hover:from-orange-300 hover:to-white"
+                         hover:from-orange-300 hover:to-white drop-shadow-lg"
                 onClick={() => navigate('/')}
               >
                धनसाथी
               </h1>
               {/* Decorative elements */}
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-orange-300 rounded-full opacity-80 
-                             animate-pulse group-hover:scale-125 transition-transform duration-300"></div>
+                             animate-pulse group-hover:scale-125 transition-transform duration-300 shadow-lg"></div>
               <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-white/50 rounded-full 
-                             group-hover:bg-orange-300/70 transition-colors duration-300"></div>
+                             group-hover:bg-orange-300/70 transition-colors duration-300 shadow-sm"></div>
             </div>
           </div>
           
