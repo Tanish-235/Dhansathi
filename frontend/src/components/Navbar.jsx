@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
+import { Menu, X } from 'lucide-react';
 
 // Navigation Button Component
 const NavButton = ({ text, href, onClick, className = '', navigate }) => {
@@ -19,14 +20,9 @@ const NavButton = ({ text, href, onClick, className = '', navigate }) => {
   return (
     <button
       onClick={handleClick}
-      className={`relative text-white font-semibold text-sm md:text-base capitalize px-5 py-3 md:px-4 md:py-2 
-                 transition-all duration-300 group hover:text-orange-300 hover:scale-105 active:scale-95
-                 rounded-lg md:rounded-none hover:bg-white/10 md:hover:bg-transparent
-                 border border-transparent hover:border-orange-300/30 md:hover:border-transparent ${className}`}
+      className={`transition-colors ${className}`}
     >
       {text}
-      <span className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-orange-300 
-                     transition-all duration-300 group-hover:w-3/4 rounded-full"></span>
     </button>
   );
 };
@@ -55,25 +51,23 @@ const HamburgerMenu = ({ isOpen, onClick }) => {
 // Navigation Menu Component
 const NavigationMenu = ({ isOpen, scrollToSection, closeMenu, navigate }) => {
   const navigationItems = [
-    { text: "Tutorial Video", href: "/tutorials", icon: "🎥" },
-    { 
-      text: "Contact Us", 
+    { text: "Tutorial Video", href: "/tutorials" },
+    {
+      text: "Contact Us",
       onClick: () => {
         scrollToSection('contact');
         closeMenu();
-      },
-      icon: "📞"
+      }
     },
-    { text: "Resources", href: "/resources", icon: "📚" },
-    { text: "Sathi bot", href: "/chat", icon: "🤖" },
-    { text: "Budget Planner", href: "/budgetplan", icon: "💰" }
+    { text: "Sathi Bot", href: "/chat" },
+    { text: "Budget Planner", href: "/budgetplan" }
   ];
 
   return (
     <nav className={`
       ${isOpen ? 'flex opacity-100 translate-y-0' : 'hidden opacity-0 -translate-y-4'} 
       md:flex md:opacity-100 md:translate-y-0
-      flex-col md:flex-row md:space-x-4 
+      flex-col md:flex-row md:items-center md:space-x-6
       absolute md:static top-full left-0 w-full md:w-auto 
       bg-purple-900/98 md:bg-transparent 
       backdrop-blur-lg md:backdrop-blur-none
@@ -85,53 +79,45 @@ const NavigationMenu = ({ isOpen, scrollToSection, closeMenu, navigate }) => {
       max-h-96 overflow-y-auto md:max-h-none md:overflow-visible
     `}>
       {navigationItems.map((item, index) => (
-        <div 
+        <div
           key={index}
           className={`transform transition-all duration-300 delay-${index * 50}
                      ${isOpen ? 'translate-x-0 opacity-100' : 'translate-x-4 opacity-0 md:translate-x-0 md:opacity-100'}`}
         >
           <NavButton
-            text={
-              <span className="flex items-center gap-2">
-                <span className="text-sm opacity-80">{item.icon}</span>
-                {item.text}
-              </span>
-            }
+            text={item.text}
             href={item.href}
             onClick={item.onClick}
-            className="block w-full text-left md:text-center md:w-auto mb-3 md:mb-0"
+            className="block w-full text-left md:text-center md:w-auto mb-3 md:mb-0 text-gray-200 hover:text-orange-300 font-medium text-base px-4 py-2 transition-colors"
             navigate={navigate}
           />
         </div>
       ))}
-      
-                    {/* Clerk Authentication Buttons */}
-       <div className="flex flex-col md:flex-row md:space-x-3 space-y-3 md:space-y-0 mt-4 md:mt-0">
-         <SignedOut>
-           <SignInButton mode="modal">
-             <button className="w-full md:w-auto bg-gradient-to-r from-orange-400 to-purple-600 hover:from-orange-500 hover:to-purple-700 
-                              text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 
-                              hover:scale-105 active:scale-95 transform shadow-lg hover:shadow-orange-500/25
+
+      {/* Clerk Authentication Buttons */}
+      <div className="flex flex-col md:flex-row md:space-x-3 space-y-3 md:space-y-0 mt-4 md:mt-0">
+        <SignedOut>
+          <SignInButton mode="modal">
+            <button className="w-full md:w-auto  
+                              text-orange-300 font-semibold px-6 py-3 rounded-lg transition-all duration-300 
+                              transform shadow-sm hover:text-orange-400 hover:shadow-orange-500/25
                               border border-orange-300/20 hover:border-orange-300/40">
-               <span className="flex items-center gap-2">
-                 <span className="text-base">🔐</span>
-                 Sign In
-               </span>
-             </button>
-           </SignInButton>
-         </SignedOut>
-         <SignedIn>
-           <div className="flex items-center justify-center md:justify-start">
-             <UserButton 
-               appearance={{
-                 elements: {
-                   avatarBox: "w-12 h-12 md:w-10 md:h-10"
-                 }
-               }}
-             />
-           </div>
-         </SignedIn>
-       </div>
+              Sign In
+            </button>
+          </SignInButton>
+        </SignedOut>
+        <SignedIn>
+          <div className="flex items-center justify-center md:justify-start">
+            <UserButton
+              appearance={{
+                elements: {
+                  avatarBox: "w-12 h-12 md:w-10 md:h-10"
+                }
+              }}
+            />
+          </div>
+        </SignedIn>
+      </div>
     </nav>
   );
 };
@@ -146,27 +132,20 @@ const Navbar = ({ isScrolled, isMenuOpen, toggleMenu, scrollToSection }) => {
   };
 
   return (
-    <header className={`
-      fixed top-0 left-0 w-full z-[1500] transition-all duration-500 ease-out
-      ${isScrolled 
-        ? 'bg-purple-900/96 backdrop-blur-xl shadow-2xl border-b border-white/10' 
-        : 'bg-transparent'
-      }
-    `}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4 md:py-6">
+    <header className="bg-purple-900/96 shadow-sm sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
           {/* Logo/Brand */}
           <div className="flex items-center group">
             <div className="relative">
-              <h1 
+              <h1
                 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white 
                          hover:text-orange-300 transition-all duration-300 cursor-pointer
-                         transform hover:scale-105 active:scale-95
                          bg-gradient-to-r from-white to-orange-100 bg-clip-text text-transparent
                          hover:from-orange-300 hover:to-white drop-shadow-lg"
                 onClick={() => navigate('/')}
               >
-               धनसाथी
+                धनसाथी
               </h1>
               {/* Decorative elements */}
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-orange-300 rounded-full opacity-80 
@@ -175,7 +154,7 @@ const Navbar = ({ isScrolled, isMenuOpen, toggleMenu, scrollToSection }) => {
                              group-hover:bg-orange-300/70 transition-colors duration-300 shadow-sm"></div>
             </div>
           </div>
-          
+
           {/* Hamburger Menu */}
           <HamburgerMenu isOpen={isMenuOpen} onClick={toggleMenu} />
           
@@ -185,17 +164,97 @@ const Navbar = ({ isScrolled, isMenuOpen, toggleMenu, scrollToSection }) => {
             scrollToSection={scrollToSection} 
             closeMenu={closeMenu}
             navigate={navigate}
-          />
+          />
+
+          {/* Desktop Navigation
+          <nav className="hidden md:flex space-x-8">
+            <NavButton text="Tutorial Video" href="/tutorials" className="text-white hover:text-orange-300" />
+            <NavButton
+              text="Contact Us"
+              onClick={() => {
+                scrollToSection('contact');
+                closeMenu();
+              }}
+              className="text-white hover:text-orange-300"
+            />
+            <NavButton text="Sathi Bot" href="/chat" className="text-white hover:text-orange-300" />
+            <NavButton text="Budget Planner" href="/budgetplan" className="text-white hover:text-orange-300" />
+          </nav> */}
+
+          {/* Authentication Section */}
+          {/* <div className="hidden md:flex items-center space-x-4">
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button className="bg-gradient-to-r from-purple-500 to-orange-500 text-white px-6 py-2 rounded-full
+                                hover:from-purple-600 hover:to-orange-600 transition-all transform hover:scale-105">
+                  Sign In
+                </button>
+              </SignInButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton
+                appearance={{
+                  elements: {
+                    avatarBox: "w-10 h-10"
+                  }
+                }}
+              />
+            </SignedIn>
+          </div> */}
+
+          {/* Mobile Menu Button */}
+          {/* <button
+            className="md:hidden text-white hover:text-orange-300"
+            onClick={toggleMenu}
+          >
+            {isMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
+          </button> */}
         </div>
+
+        {/* Mobile Menu */}
+        {/* {isMenuOpen && (
+          <div className="md:hidden bg-white border-t">
+            <nav className="py-4 space-y-2">
+              <NavButton text="Tutorial Video" href="/tutorials" className="block px-4 py-2 text-gray-700 hover:bg-purple-50 w-full text-left" />
+              <NavButton
+                text="Contact Us"
+                onClick={() => {
+                  scrollToSection('contact');
+                  closeMenu();
+                }}
+                className="block px-4 py-2 text-gray-700 hover:bg-purple-50 w-full text-left"
+              />
+              <NavButton text="Sathi Bot" href="/chat" className="block px-4 py-2 text-gray-700 hover:bg-purple-50 w-full text-left" />
+              <NavButton text="Budget Planner" href="/budgetplan" className="block px-4 py-2 text-gray-700 hover:bg-purple-50 w-full text-left" />
+
+              <div className="px-4 py-2">
+                <SignedOut>
+                  <SignInButton mode="modal">
+                    <button className="w-full bg-gradient-to-r from-purple-500 to-orange-500 text-white py-2 rounded-full">
+                      Sign In
+                    </button>
+                  </SignInButton>
+                </SignedOut>
+                <SignedIn>
+                  <div className="flex justify-center">
+                    <UserButton
+                      appearance={{
+                        elements: {
+                          avatarBox: "w-12 h-12"
+                        }
+                      }}
+                    />
+                  </div>
+                </SignedIn>
+              </div>
+            </nav>
+          </div>
+        )} */}
       </div>
-      
-      {/* Mobile menu backdrop */}
-      <div 
-        className={`fixed inset-0 bg-black/20 backdrop-blur-sm md:hidden transition-opacity duration-300
-                   ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-        onClick={closeMenu}
-        style={{ top: '100%' }}
-      />
     </header>
   );
 };

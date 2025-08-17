@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Lightbulb, Code, Sun, Moon, Trash2, Bot, User, Edit, Search } from 'lucide-react';
+import Footer from '../components/Footer.jsx';
 
 const SathiBot = () => {
   const navigate = useNavigate();
@@ -376,6 +377,7 @@ const SathiBot = () => {
             </form>
           </div>
         </div>
+        <Footer />
       </div>
     </>
   );

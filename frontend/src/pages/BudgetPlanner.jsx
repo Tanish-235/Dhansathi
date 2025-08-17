@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, Area, AreaChart } from 'recharts';
 import { Calculator, DollarSign, PiggyBank, Home, BookOpen, Utensils, TrendingUp, AlertTriangle, CheckCircle, Target, Download, Moon, Sun, Plus, Minus, Eye, EyeOff, Settings, Award } from 'lucide-react';
 import { Document, Packer, Paragraph, TextRun } from 'docx'; // Added for docx export
+import Footer from '../components/Footer.jsx';
+import Navbar from '../components/Navbar.jsx';
 
 const BudgetPlanner = () => {
   const navigate = useNavigate();
@@ -321,152 +323,177 @@ const BudgetPlanner = () => {
               </select>
             </div>
           </div>
+          
+          {/* Placeholder message when no salary is entered */}
+          {!salary && (
+            <div className="mt-6 p-6 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900 dark:to-indigo-900 rounded-xl border-2 border-dashed border-purple-300 dark:border-purple-600">
+              <div className="text-center">
+                <Calculator className="h-12 w-12 text-purple-500 mx-auto mb-3" />
+                <h3 className="text-xl font-semibold text-purple-700 dark:text-purple-300 mb-2">
+                  Enter Your Salary to Get Started
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Once you enter your monthly income, you'll be able to:
+                </p>
+                <ul className="mt-3 text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                  <li>• Create a personalized budget allocation</li>
+                  <li>• View financial health analytics and charts</li>
+                  <li>• Set and track financial goals</li>
+                  <li>• Get smart recommendations for better financial planning</li>
+                </ul>
+              </div>
+            </div>
+          )}
         </div>
 
+        {/* Financial Score - Only show when salary is entered */}
         {salary && (
-          <>
-            {/* Financial Score */}
-            <div className={`${cardClasses} rounded-2xl shadow-xl p-8 border bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900 dark:to-indigo-900`}>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold text-purple-700 dark:text-purple-300">Financial Health Score</h2>
-                <div className="flex items-center gap-2">
-                  <Award className="h-6 w-6 text-yellow-500" />
-                  <span className="text-2xl font-bold text-purple-700 dark:text-purple-300">{getFinancialScore()}/100</span>
-                </div>
-              </div>
-              
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 mb-4">
-                <div 
-                  className="bg-gradient-to-r from-purple-500 to-indigo-600 h-4 rounded-full transition-all duration-1000" 
-                  style={{ width: `${getFinancialScore()}%` }}
-                ></div>
-              </div>
-              
-              <p className="text-gray-600 dark:text-gray-400">
-                {getFinancialScore() >= 80 ? 'Excellent financial health!' : 
-                 getFinancialScore() >= 60 ? 'Good financial management' : 
-                 getFinancialScore() >= 40 ? 'Room for improvement' : 'Needs attention'}
-              </p>
-            </div>
-
-            {/* Loan & EMI Section */}
-            <div className={`${cardClasses} rounded-2xl shadow-xl p-8 border transition-all duration-300`}>
-              <h2 className="text-2xl font-bold mb-6 text-purple-700 dark:text-purple-300">Loan & EMI Calculator</h2>
-              
-              <div className="space-y-6">
-                <div className="flex items-center gap-3">
-                  <input
-                    type="checkbox"
-                    checked={hasLoan}
-                    onChange={(e) => setHasLoan(e.target.checked)}
-                    className="h-5 w-5 rounded text-purple-600"
-                    style={{ accentColor: '#4b0082' }}
-                  />
-                  <label className="text-gray-700 dark:text-gray-300 font-medium">I have existing loans</label>
-                </div>
-
-                {hasLoan && (
-                  <div className={`grid md:grid-cols-4 gap-4 p-6 rounded-xl transition-all ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Loan Amount ({currency})
-                      </label>
-                      <input
-                        type="number"
-                        value={loanDetails.amount}
-                        onChange={(e) => setLoanDetails({...loanDetails, amount: e.target.value})}
-                        className={`w-full px-3 py-3 border-2 rounded-lg transition-all focus:ring-2 focus:ring-purple-200 ${darkMode ? 'bg-gray-600 border-gray-500 text-white' : 'border-gray-300'}`}
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Interest Rate (%)
-                      </label>
-                      <input
-                        type="number"
-                        value={loanDetails.interestRate}
-                        onChange={(e) => setLoanDetails({...loanDetails, interestRate: e.target.value})}
-                        step="0.1"
-                        className={`w-full px-3 py-3 border-2 rounded-lg transition-all focus:ring-2 focus:ring-purple-200 ${darkMode ? 'bg-gray-600 border-gray-500 text-white' : 'border-gray-300'}`}
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Duration (Years)
-                      </label>
-                      <input
-                        type="number"
-                        value={loanDetails.duration}
-                        onChange={(e) => setLoanDetails({...loanDetails, duration: e.target.value})}
-                        className={`w-full px-3 py-3 border-2 rounded-lg transition-all focus:ring-2 focus:ring-purple-200 ${darkMode ? 'bg-gray-600 border-gray-500 text-white' : 'border-gray-300'}`}
-                      />
-                    </div>
-                    
-                    <div className="flex items-end">
-                      <button
-                        onClick={calculateEMI}
-                        className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-3 px-4 rounded-lg transition-all transform hover:scale-105 shadow-lg"
-                      >
-                        Calculate EMI
-                      </button>
-                    </div>
-                    
-                    {emi > 0 && (
-                      <div className="md:col-span-4 p-4 bg-gradient-to-r from-purple-100 to-indigo-100 dark:from-purple-800 dark:to-indigo-800 rounded-xl">
-                        <p className="text-lg font-semibold text-purple-800 dark:text-purple-200">
-                          Monthly EMI: {currency}{emi.toLocaleString()}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                )}
+          <div className={`${cardClasses} rounded-2xl shadow-xl p-8 border bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900 dark:to-indigo-900`}>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-bold text-purple-700 dark:text-purple-300">Financial Health Score</h2>
+              <div className="flex items-center gap-2">
+                <Award className="h-6 w-6 text-yellow-500" />
+                <span className="text-2xl font-bold text-purple-700 dark:text-purple-300">{getFinancialScore()}/100</span>
               </div>
             </div>
+            
+            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 mb-4">
+              <div 
+                className="bg-gradient-to-r from-purple-500 to-indigo-600 h-4 rounded-full transition-all duration-1000" 
+                style={{ width: `${getFinancialScore()}%` }}
+              ></div>
+            </div>
+            
+            <p className="text-gray-600 dark:text-gray-400">
+              {getFinancialScore() >= 80 ? 'Excellent financial health!' : 
+               getFinancialScore() >= 60 ? 'Good financial management' : 
+               getFinancialScore() >= 40 ? 'Room for improvement' : 'Needs attention'}
+            </p>
+          </div>
+        )}
 
-            {/* Budget Summary Cards */}
-            <div className="grid md:grid-cols-4 gap-6">
-              <div className="bg-gradient-to-br from-green-500 to-emerald-600 text-white p-6 rounded-2xl shadow-xl transform hover:scale-105 transition-all">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-lg font-semibold opacity-90">Total Income</h3>
-                    <p className="text-2xl font-bold">{currency}{parseFloat(salary || 0).toLocaleString()}</p>
-                  </div>
-                  <DollarSign className="h-8 w-8 opacity-80" />
-                </div>
+        {/* Loan & EMI Section - Only show when salary is entered */}
+        {salary && (
+          <div className={`${cardClasses} rounded-2xl shadow-xl p-8 border transition-all duration-300`}>
+            <h2 className="text-2xl font-bold mb-6 text-purple-700 dark:text-purple-300">Loan & EMI Calculator</h2>
+            
+            <div className="space-y-6">
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  checked={hasLoan}
+                  onChange={(e) => setHasLoan(e.target.checked)}
+                  className="h-5 w-5 rounded text-purple-600"
+                  style={{ accentColor: '#4b0082' }}
+                />
+                <label className="text-gray-700 dark:text-gray-300 font-medium">I have existing loans</label>
               </div>
-              
-              <div className="bg-gradient-to-br from-red-500 to-red-600 text-white p-6 rounded-2xl shadow-xl transform hover:scale-105 transition-all">
-                <div className="flex items-center justify-between">
+
+              {hasLoan && (
+                <div className={`grid md:grid-cols-4 gap-4 p-6 rounded-xl transition-all ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
                   <div>
-                    <h3 className="text-lg font-semibold opacity-90">EMI</h3>
-                    <p className="text-2xl font-bold">{currency}{emi.toLocaleString()}</p>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Loan Amount ({currency})
+                    </label>
+                    <input
+                      type="number"
+                      value={loanDetails.amount}
+                      onChange={(e) => setLoanDetails({...loanDetails, amount: e.target.value})}
+                      className={`w-full px-3 py-3 border-2 rounded-lg transition-all focus:ring-2 focus:ring-purple-200 ${darkMode ? 'bg-gray-600 border-gray-500 text-white' : 'border-gray-300'}`}
+                    />
                   </div>
-                  <Home className="h-8 w-8 opacity-80" />
-                </div>
-              </div>
-              
-              <div className="bg-gradient-to-br from-purple-600 to-indigo-700 text-white p-6 rounded-2xl shadow-xl transform hover:scale-105 transition-all">
-                <div className="flex items-center justify-between">
+                  
                   <div>
-                    <h3 className="text-lg font-semibold opacity-90">Available Budget</h3>
-                    <p className="text-2xl font-bold">{currency}{availableBudget.toLocaleString()}</p>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Interest Rate (%)
+                    </label>
+                    <input
+                      type="number"
+                      value={loanDetails.interestRate}
+                      onChange={(e) => setLoanDetails({...loanDetails, interestRate: e.target.value})}
+                      step="0.1"
+                      className={`w-full px-3 py-3 border-2 rounded-lg transition-all focus:ring-2 focus:ring-purple-200 ${darkMode ? 'bg-gray-600 border-gray-500 text-white' : 'border-gray-300'}`}
+                    />
                   </div>
-                  <Calculator className="h-8 w-8 opacity-80" />
-                </div>
-              </div>
-              
-              <div className={`text-white p-6 rounded-2xl shadow-xl transform hover:scale-105 transition-all ${remainingBudget >= 0 ? 'bg-gradient-to-br from-orange-500 to-orange-600' : 'bg-gradient-to-br from-red-500 to-red-600'}`}>
-                <div className="flex items-center justify-between">
+                  
                   <div>
-                    <h3 className="text-lg font-semibold opacity-90">Remaining</h3>
-                    <p className="text-2xl font-bold">{currency}{remainingBudget.toLocaleString()}</p>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Duration (Years)
+                    </label>
+                    <input
+                      type="number"
+                      value={loanDetails.duration}
+                      onChange={(e) => setLoanDetails({...loanDetails, duration: e.target.value})}
+                      className={`w-full px-3 py-3 border-2 rounded-lg transition-all focus:ring-2 focus:ring-purple-200 ${darkMode ? 'bg-gray-600 border-gray-500 text-white' : 'border-gray-300'}`}
+                    />
                   </div>
-                  <PiggyBank className="h-8 w-8 opacity-80" />
+                  
+                  <div className="flex items-end">
+                    <button
+                      onClick={calculateEMI}
+                      className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-3 px-4 rounded-lg transition-all transform hover:scale-105 shadow-lg"
+                    >
+                      Calculate EMI
+                    </button>
+                  </div>
+                  
+                  {emi > 0 && (
+                    <div className="md:col-span-4 p-4 bg-gradient-to-r from-purple-100 to-indigo-100 dark:from-purple-800 dark:to-indigo-800 rounded-xl">
+                      <p className="text-lg font-semibold text-purple-800 dark:text-purple-200">
+                        Monthly EMI: {currency}{emi.toLocaleString()}
+                      </p>
+                    </div>
+                  )}
                 </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Budget Summary Cards - Only show when salary is entered */}
+        {salary && (
+          <div className="grid md:grid-cols-4 gap-6">
+            <div className="bg-gradient-to-br from-green-500 to-emerald-600 text-white p-6 rounded-2xl shadow-xl transform hover:scale-105 transition-all">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold opacity-90">Total Income</h3>
+                  <p className="text-2xl font-bold">{currency}{parseFloat(salary || 0).toLocaleString()}</p>
+                </div>
+                <DollarSign className="h-8 w-8 opacity-80" />
               </div>
             </div>
+            
+            <div className="bg-gradient-to-r from-red-500 to-red-600 text-white p-6 rounded-2xl shadow-xl transform hover:scale-105 transition-all">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold opacity-90">EMI</h3>
+                  <p className="text-2xl font-bold">{currency}{emi.toLocaleString()}</p>
+                </div>
+                <Home className="h-8 w-8 opacity-80" />
+              </div>
+            </div>
+            
+            <div className="bg-gradient-to-br from-purple-600 to-indigo-700 text-white p-6 rounded-2xl shadow-xl transform hover:scale-105 transition-all">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold opacity-90">Available Budget</h3>
+                  <p className="text-2xl font-bold">{currency}{availableBudget.toLocaleString()}</p>
+                </div>
+                <Calculator className="h-8 w-8 opacity-80" />
+              </div>
+            </div>
+            
+            <div className={`text-white p-6 rounded-2xl shadow-xl transform hover:scale-105 transition-all ${remainingBudget >= 0 ? 'bg-gradient-to-br from-orange-500 to-orange-600' : 'bg-gradient-to-br from-red-500 to-red-600'}`}>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold opacity-90">Remaining</h3>
+                  <p className="text-2xl font-bold">{currency}{remainingBudget.toLocaleString()}</p>
+                </div>
+                <PiggyBank className="h-8 w-8 opacity-80" />
+              </div>
+            </div>
+          </div>
+        )}
 
             {/* Navigation Tabs */}
             <div className={`${cardClasses} rounded-2xl shadow-xl border overflow-hidden`}>
@@ -508,191 +535,219 @@ const BudgetPlanner = () => {
                 <div className="p-8">
                   <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-bold text-purple-700 dark:text-purple-300">Budget Allocation</h2>
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => setShowDetails(!showDetails)}
-                        className="flex items-center gap-2 px-4 py-2 text-purple-600 hover:bg-purple-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                      >
-                        {showDetails ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                        {showDetails ? 'Hide Details' : 'Show Details'}
-                      </button>
-                      <button
-                        onClick={applyRecommendedBudget}
-                        className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 py-2 rounded-lg transition-all transform hover:scale-105"
-                      >
-                        Apply Recommended
-                      </button>
-                      <button
-                        onClick={resetBudget}
-                        className="bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 text-white px-6 py-2 rounded-lg transition-all transform hover:scale-105"
-                      >
-                        Reset
-                      </button>
-                    </div>
+                    {salary && (
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={() => setShowDetails(!showDetails)}
+                          className="flex items-center gap-2 px-4 py-2 text-purple-600 hover:bg-purple-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                        >
+                          {showDetails ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                          {showDetails ? 'Hide Details' : 'Show Details'}
+                        </button>
+                        <button
+                          onClick={applyRecommendedBudget}
+                          className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 py-2 rounded-lg transition-all transform hover:scale-105"
+                        >
+                          Apply Recommended
+                        </button>
+                        <button
+                          onClick={resetBudget}
+                          className="bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 text-white px-6 py-2 rounded-lg transition-all transform hover:scale-105"
+                        >
+                          Reset
+                        </button>
+                      </div>
+                    )}
                   </div>
 
-                  <div className="grid lg:grid-cols-2 gap-6">
-                    {categories.map((category) => {
-                      const Icon = category.icon;
-                      const maxValue = availableBudget;
-                      const recommendedAmount = Math.round(availableBudget * (category.recommendedPercent / 100));
-                      const currentPercent = availableBudget > 0 ? Math.round((budgetAllocations[category.key] / availableBudget) * 100) : 0;
-                      
-                      return (
-                        <div key={category.key} className={`p-6 rounded-xl border-2 transition-all hover:shadow-lg ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-200 hover:border-purple-200'}`}>
-                          <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-3">
-                              <div className="p-3 rounded-xl" style={{ backgroundColor: category.color + '20' }}>
-                                <Icon className="h-6 w-6" style={{ color: category.color }} />
+                  {!salary ? (
+                    <div className="text-center py-12">
+                      <Calculator className="h-16 w-16 text-purple-400 mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
+                        Enter Your Salary to Start Budgeting
+                      </h3>
+                      <p className="text-gray-500 dark:text-gray-500">
+                        Set your monthly income above to create a personalized budget allocation
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="grid lg:grid-cols-2 gap-6">
+                      {categories.map((category) => {
+                        const Icon = category.icon;
+                        const maxValue = availableBudget;
+                        const recommendedAmount = Math.round(availableBudget * (category.recommendedPercent / 100));
+                        const currentPercent = availableBudget > 0 ? Math.round((budgetAllocations[category.key] / availableBudget) * 100) : 0;
+                        
+                        return (
+                          <div key={category.key} className={`p-6 rounded-xl border-2 transition-all hover:shadow-lg ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-200 hover:border-purple-200'}`}>
+                            <div className="flex items-center justify-between mb-4">
+                              <div className="flex items-center gap-3">
+                                <div className="p-3 rounded-xl" style={{ backgroundColor: category.color + '20' }}>
+                                  <Icon className="h-6 w-6" style={{ color: category.color }} />
+                                </div>
+                                <div>
+                                  <label className="font-semibold text-gray-700 dark:text-gray-300">
+                                    {category.label}
+                                  </label>
+                                  {showDetails && (
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                      Recommended: {category.recommendedPercent}%
+                                    </p>
+                                  )}
+                                </div>
                               </div>
-                              <div>
-                                <label className="font-semibold text-gray-700 dark:text-gray-300">
-                                  {category.label}
-                                </label>
-                                {showDetails && (
-                                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                                    Recommended: {category.recommendedPercent}%
-                                  </p>
-                                )}
+                              <div className="text-right">
+                                <span className="font-bold text-xl" style={{ color: category.color }}>
+                                  {currency}{budgetAllocations[category.key].toLocaleString()}
+                                </span>
+                                <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                                  {currentPercent}%
+                                </div>
                               </div>
                             </div>
-                            <div className="text-right">
-                              <span className="font-bold text-xl" style={{ color: category.color }}>
-                                {currency}{budgetAllocations[category.key].toLocaleString()}
-                              </span>
-                              <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                                {currentPercent}%
+                            
+                            <input
+                              type="range"
+                              min="0"
+                              max={maxValue}
+                              value={budgetAllocations[category.key]}
+                              onChange={(e) => setBudgetAllocations({
+                                ...budgetAllocations,
+                                [category.key]: parseInt(e.target.value)
+                              })}
+                              className="w-full h-3 rounded-lg appearance-none cursor-pointer transition-all"
+                              style={{
+                                background: `linear-gradient(to right, ${category.color} 0%, ${category.color} ${(budgetAllocations[category.key] / maxValue) * 100}%, #e5e7eb ${(budgetAllocations[category.key] / maxValue) * 100}%, #e5e7eb 100%)`
+                              }}
+                            />
+                            
+                            {showDetails && (
+                              <div className="flex justify-between items-center mt-2">
+                                <span className="text-xs text-gray-500">0</span>
+                                <span className="text-xs font-medium" style={{ color: category.color }}>
+                                  Target: {currency}{recommendedAmount.toLocaleString()}
+                                </span>
+                                <span className="text-xs text-gray-500">{currency}{maxValue.toLocaleString()}</span>
                               </div>
-                            </div>
+                            )}
                           </div>
-                          
-                          <input
-                            type="range"
-                            min="0"
-                            max={maxValue}
-                            value={budgetAllocations[category.key]}
-                            onChange={(e) => setBudgetAllocations({
-                              ...budgetAllocations,
-                              [category.key]: parseInt(e.target.value)
-                            })}
-                            className="w-full h-3 rounded-lg appearance-none cursor-pointer transition-all"
-                            style={{
-                              background: `linear-gradient(to right, ${category.color} 0%, ${category.color} ${(budgetAllocations[category.key] / maxValue) * 100}%, #e5e7eb ${(budgetAllocations[category.key] / maxValue) * 100}%, #e5e7eb 100%)`
-                            }}
-                          />
-                          
-                          {showDetails && (
-                            <div className="flex justify-between items-center mt-2">
-                              <span className="text-xs text-gray-500">0</span>
-                              <span className="text-xs font-medium" style={{ color: category.color }}>
-                                Target: {currency}{recommendedAmount.toLocaleString()}
-                              </span>
-                              <span className="text-xs text-gray-500">{currency}{maxValue.toLocaleString()}</span>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               )}
 
               {/* Analytics Tab */}
               {activeTab === 'analytics' && (
                 <div className="p-8">
-                  <div className="grid lg:grid-cols-2 gap-8">
-                    {/* Pie Chart */}
-                    <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
-                      <h3 className="text-xl font-bold mb-4 text-purple-700 dark:text-purple-300">Budget Distribution</h3>
-                      <div className="h-80">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <PieChart>
-                            <Pie
-                              data={pieData}
-                              cx="50%"
-                              cy="50%"
-                              outerRadius={100}
-                              dataKey="value"
-                              label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(1)}%`}
-                            >
-                              {pieData.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={entry.color} />
-                              ))}
-                            </Pie>
-                            <Tooltip content={<CustomTooltip />} />
-                          </PieChart>
-                        </ResponsiveContainer>
-                      </div>
+                  {!salary ? (
+                    <div className="text-center py-12">
+                      <TrendingUp className="h-16 w-16 text-purple-400 mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
+                        Enter Your Salary to View Analytics
+                      </h3>
+                      <p className="text-gray-500 dark:text-gray-500">
+                        Once you set your income, you'll see detailed charts and financial insights
+                      </p>
                     </div>
-
-                    {/* Bar Chart */}
-                    <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
-                      <h3 className="text-xl font-bold mb-4 text-purple-700 dark:text-purple-300">Allocated vs Recommended</h3>
-                      <div className="h-80">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={barData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip content={<CustomTooltip />} />
-                            <Bar dataKey="allocated" fill="#4b0082" name="Allocated" />
-                            <Bar dataKey="recommended" fill="orange" name="Recommended" />
-                          </BarChart>
-                        </ResponsiveContainer>
-                      </div>
-                    </div>
-
-                    {/* Savings Projection */}
-                    <div className={`lg:col-span-2 p-6 rounded-xl ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
-                      <h3 className="text-xl font-bold mb-4 text-purple-700 dark:text-purple-300">6-Month Savings Projection</h3>
-                      <div className="h-80">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <AreaChart data={savingsProjection}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="month" />
-                            <YAxis />
-                            <Tooltip content={<CustomTooltip />} />
-                            <Area type="monotone" dataKey="savings" stroke="#4b0082" fill="rgba(75, 0, 130, 0.3)" />
-                          </AreaChart>
-                        </ResponsiveContainer>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Financial Health Analysis */}
-                  <div className="mt-8 grid md:grid-cols-3 gap-6">
-                    <div className="p-6 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800 rounded-xl">
-                      <h4 className="font-semibold mb-2 text-purple-700 dark:text-purple-300">Savings Rate</h4>
-                      <div className="space-y-2">
-                        <div className={`text-2xl font-bold ${getSavingsAnalysis().color}`}>
-                          {availableBudget > 0 ? Math.round((budgetAllocations.savings / availableBudget) * 100) : 0}%
+                  ) : (
+                    <>
+                      <div className="grid lg:grid-cols-2 gap-8">
+                        {/* Pie Chart */}
+                        <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
+                          <h3 className="text-xl font-bold mb-4 text-purple-700 dark:text-purple-300">Budget Distribution</h3>
+                          <div className="h-80">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <PieChart>
+                                <Pie
+                                  data={pieData}
+                                  cx="50%"
+                                  cy="50%"
+                                  outerRadius={100}
+                                  dataKey="value"
+                                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(1)}%`}
+                                >
+                                  {pieData.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={entry.color} />
+                                  ))}
+                                </Pie>
+                                <Tooltip content={<CustomTooltip />} />
+                              </PieChart>
+                            </ResponsiveContainer>
+                          </div>
                         </div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">{getSavingsAnalysis().message}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="p-6 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900 dark:to-orange-800 rounded-xl">
-                      <h4 className="font-semibold mb-2 text-orange-600">Budget Utilization</h4>
-                      <div className="space-y-2">
-                        <div className="text-2xl font-bold text-orange-600">
-                          {availableBudget > 0 ? Math.round((totalAllocated / availableBudget) * 100) : 0}%
+
+                        {/* Bar Chart */}
+                        <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
+                          <h3 className="text-xl font-bold mb-4 text-purple-700 dark:text-purple-300">Allocated vs Recommended</h3>
+                          <div className="h-80">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <BarChart data={barData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip content={<CustomTooltip />} />
+                                <Bar dataKey="allocated" fill="#4b0082" name="Allocated" />
+                                <Bar dataKey="recommended" fill="orange" name="Recommended" />
+                              </BarChart>
+                            </ResponsiveContainer>
+                          </div>
                         </div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                          {totalAllocated > availableBudget ? 'Over budget!' : 'Within budget'}
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <div className="p-6 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 rounded-xl">
-                      <h4 className="font-semibold mb-2 text-green-600">Emergency Fund</h4>
-                      <div className="space-y-2">
-                        <div className="text-2xl font-bold text-green-600">
-                          {Math.round(budgetAllocations.savings * 6)} {currency}
+
+                        {/* Savings Projection */}
+                        <div className={`lg:col-span-2 p-6 rounded-xl ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
+                          <h3 className="text-xl font-bold mb-4 text-purple-700 dark:text-purple-300">6-Month Savings Projection</h3>
+                          <div className="h-80">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <AreaChart data={savingsProjection}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="month" />
+                                <YAxis />
+                                <Tooltip content={<CustomTooltip />} />
+                                <Area type="monotone" dataKey="savings" stroke="#4b0082" fill="rgba(75, 0, 130, 0.3)" />
+                              </AreaChart>
+                            </ResponsiveContainer>
+                          </div>
                         </div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">6 months of savings</p>
                       </div>
-                    </div>
-                  </div>
+
+                      {/* Financial Health Analysis */}
+                      <div className="mt-8 grid md:grid-cols-3 gap-6">
+                        <div className="p-6 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800 rounded-xl">
+                          <h4 className="font-semibold mb-2 text-purple-700 dark:text-purple-300">Savings Rate</h4>
+                          <div className="space-y-2">
+                            <div className={`text-2xl font-bold ${getSavingsAnalysis().color}`}>
+                              {availableBudget > 0 ? Math.round((budgetAllocations.savings / availableBudget) * 100) : 0}%
+                            </div>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">{getSavingsAnalysis().message}</p>
+                          </div>
+                        </div>
+                        
+                        <div className="p-6 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900 dark:to-orange-800 rounded-xl">
+                          <h4 className="font-semibold mb-2 text-orange-600">Budget Utilization</h4>
+                          <div className="space-y-2">
+                            <div className="text-2xl font-bold text-orange-600">
+                              {availableBudget > 0 ? Math.round((totalAllocated / availableBudget) * 100) : 0}%
+                            </div>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                              {totalAllocated > availableBudget ? 'Over budget!' : 'Within budget'}
+                            </p>
+                          </div>
+                        </div>
+                        
+                        <div className="p-6 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 rounded-xl">
+                          <h4 className="font-semibold mb-2 text-green-600">Emergency Fund</h4>
+                          <div className="space-y-2">
+                            <div className="text-2xl font-bold text-green-600">
+                              {Math.round(budgetAllocations.savings * 6)} {currency}
+                            </div>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">6 months of savings</p>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
 
@@ -701,166 +756,179 @@ const BudgetPlanner = () => {
                 <div className="p-8">
                   <h2 className="text-2xl font-bold text-purple-700 dark:text-purple-300 mb-6">Financial Goals</h2>
                   
-                  <div className="grid lg:grid-cols-2 gap-8">
-                    {/* Goal Setting */}
-                    <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
-                      <h3 className="text-xl font-bold mb-4 text-purple-700 dark:text-purple-300">Set Your Goals</h3>
-                      
-                      <div className="space-y-6">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Emergency Fund Target ({currency})
-                          </label>
-                          <input
-                            type="number"
-                            value={goals.emergencyFund}
-                            onChange={(e) => setGoals({...goals, emergencyFund: e.target.value})}
-                            placeholder="6 months of expenses"
-                            className={`w-full px-4 py-3 border-2 rounded-lg transition-all focus:ring-2 focus:ring-purple-200 ${darkMode ? 'bg-gray-600 border-gray-500 text-white' : 'border-gray-300'}`}
-                          />
-                        </div>
+                  {!salary ? (
+                    <div className="text-center py-12">
+                      <Target className="h-16 w-16 text-purple-400 mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
+                        Enter Your Salary to Set Goals
+                      </h3>
+                      <p className="text-gray-500 dark:text-gray-500">
+                        Set your monthly income above to start planning your financial goals
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="grid lg:grid-cols-2 gap-8">
+                      {/* Goal Setting */}
+                      <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
+                        <h3 className="text-xl font-bold mb-4 text-purple-700 dark:text-purple-300">Set Your Goals</h3>
                         
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Savings Goal ({currency})
-                          </label>
-                          <input
-                            type="number"
-                            value={goals.savingsGoal}
-                            onChange={(e) => setGoals({...goals, savingsGoal: e.target.value})}
-                            placeholder="Your target savings"
-                            className={`w-full px-4 py-3 border-2 rounded-lg transition-all focus:ring-2 focus:ring-purple-200 ${darkMode ? 'bg-gray-600 border-gray-500 text-white' : 'border-gray-300'}`}
-                          />
+                        <div className="space-y-6">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                              Emergency Fund Target ({currency})
+                            </label>
+                            <input
+                              type="number"
+                              value={goals.emergencyFund}
+                              onChange={(e) => setGoals({...goals, emergencyFund: e.target.value})}
+                              placeholder="6 months of expenses"
+                              className={`w-full px-4 py-3 border-2 rounded-lg transition-all focus:ring-2 focus:ring-purple-200 ${darkMode ? 'bg-gray-600 border-gray-500 text-white' : 'border-gray-300'}`}
+                            />
+                          </div>
+                          
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                              Savings Goal ({currency})
+                            </label>
+                            <input
+                              type="number"
+                              value={goals.savingsGoal}
+                              onChange={(e) => setGoals({...goals, savingsGoal: e.target.value})}
+                              placeholder="Your target savings"
+                              className={`w-full px-4 py-3 border-2 rounded-lg transition-all focus:ring-2 focus:ring-purple-200 ${darkMode ? 'bg-gray-600 border-gray-500 text-white' : 'border-gray-300'}`}
+                            />
+                          </div>
+                          
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                              Target Date
+                            </label>
+                            <input
+                              type="date"
+                              value={goals.targetDate}
+                              onChange={(e) => setGoals({...goals, targetDate: e.target.value})}
+                              className={`w-full px-4 py-3 border-2 rounded-lg transition-all focus:ring-2 focus:ring-purple-200 ${darkMode ? 'bg-gray-600 border-gray-500 text-white' : 'border-gray-300'}`}
+                            />
+                          </div>
                         </div>
+                      </div>
+
+                      {/* Goal Progress */}
+                      <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
+                        <h3 className="text-xl font-bold mb-4 text-purple-700 dark:text-purple-300">Goal Progress</h3>
                         
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Target Date
-                          </label>
-                          <input
-                            type="date"
-                            value={goals.targetDate}
-                            onChange={(e) => setGoals({...goals, targetDate: e.target.value})}
-                            className={`w-full px-4 py-3 border-2 rounded-lg transition-all focus:ring-2 focus:ring-purple-200 ${darkMode ? 'bg-gray-600 border-gray-500 text-white' : 'border-gray-300'}`}
-                          />
+                        <div className="space-y-6">
+                          {/* Emergency Fund Progress */}
+                          {goals.emergencyFund && (
+                            <div>
+                              <div className="flex justify-between items-center mb-2">
+                                <span className="font-medium text-gray-700 dark:text-gray-300">Emergency Fund</span>
+                                <span className="text-sm text-gray-500">
+                                  {currency}{(budgetAllocations.savings * 6).toLocaleString()} / {currency}{parseFloat(goals.emergencyFund || 0).toLocaleString()}
+                                </span>
+                              </div>
+                              <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3">
+                                <div 
+                                  className="bg-gradient-to-r from-green-500 to-green-600 h-3 rounded-full transition-all duration-1000" 
+                                  style={{ 
+                                    width: `${Math.min((budgetAllocations.savings * 6 / parseFloat(goals.emergencyFund || 1)) * 100, 100)}%` 
+                                  }}
+                                ></div>
+                              </div>
+                              <p className="text-xs text-gray-500 mt-1">
+                                {Math.min(Math.round((budgetAllocations.savings * 6 / parseFloat(goals.emergencyFund || 1)) * 100), 100)}% Complete
+                              </p>
+                            </div>
+                          )}
+
+                          {/* Savings Goal Progress */}
+                          {goals.savingsGoal && (
+                            <div>
+                              <div className="flex justify-between items-center mb-2">
+                                <span className="font-medium text-gray-700 dark:text-gray-300">Savings Goal</span>
+                                <span className="text-sm text-gray-500">
+                                  {currency}{budgetAllocations.savings.toLocaleString()} / {currency}{parseFloat(goals.savingsGoal || 0).toLocaleString()} monthly
+                                </span>
+                              </div>
+                              <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3">
+                                <div 
+                                  className="bg-gradient-to-r from-purple-500 to-purple-600 h-3 rounded-full transition-all duration-1000" 
+                                  style={{ 
+                                    width: `${Math.min((budgetAllocations.savings / parseFloat(goals.savingsGoal || 1)) * 100, 100)}%` 
+                                  }}
+                                ></div>
+                              </div>
+                              <p className="text-xs text-gray-500 mt-1">
+                                {Math.min(Math.round((budgetAllocations.savings / parseFloat(goals.savingsGoal || 1)) * 100), 100)}% of monthly target
+                              </p>
+                            </div>
+                          )}
+
+                          {/* Time to Goal */}
+                          {goals.savingsGoal && budgetAllocations.savings > 0 && (
+                            <div className="p-4 bg-gradient-to-r from-purple-100 to-indigo-100 dark:from-purple-800 dark:to-indigo-800 rounded-lg">
+                              <p className="text-sm font-medium text-purple-800 dark:text-purple-200">
+                                Time to reach goal: {Math.ceil(parseFloat(goals.savingsGoal || 0) / budgetAllocations.savings)} months
+                              </p>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
-
-                    {/* Goal Progress */}
-                    <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
-                      <h3 className="text-xl font-bold mb-4 text-purple-700 dark:text-purple-300">Goal Progress</h3>
-                      
-                      <div className="space-y-6">
-                        {/* Emergency Fund Progress */}
-                        {goals.emergencyFund && (
-                          <div>
-                            <div className="flex justify-between items-center mb-2">
-                              <span className="font-medium text-gray-700 dark:text-gray-300">Emergency Fund</span>
-                              <span className="text-sm text-gray-500">
-                                {currency}{(budgetAllocations.savings * 6).toLocaleString()} / {currency}{parseFloat(goals.emergencyFund || 0).toLocaleString()}
-                              </span>
-                            </div>
-                            <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3">
-                              <div 
-                                className="bg-gradient-to-r from-green-500 to-green-600 h-3 rounded-full transition-all duration-1000" 
-                                style={{ 
-                                  width: `${Math.min((budgetAllocations.savings * 6 / parseFloat(goals.emergencyFund || 1)) * 100, 100)}%` 
-                                }}
-                              ></div>
-                            </div>
-                            <p className="text-xs text-gray-500 mt-1">
-                              {Math.min(Math.round((budgetAllocations.savings * 6 / parseFloat(goals.emergencyFund || 1)) * 100), 100)}% Complete
-                            </p>
-                          </div>
-                        )}
-
-                        {/* Savings Goal Progress */}
-                        {goals.savingsGoal && (
-                          <div>
-                            <div className="flex justify-between items-center mb-2">
-                              <span className="font-medium text-gray-700 dark:text-gray-300">Savings Goal</span>
-                              <span className="text-sm text-gray-500">
-                                {currency}{budgetAllocations.savings.toLocaleString()} / {currency}{parseFloat(goals.savingsGoal || 0).toLocaleString()} monthly
-                              </span>
-                            </div>
-                            <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3">
-                              <div 
-                                className="bg-gradient-to-r from-purple-500 to-purple-600 h-3 rounded-full transition-all duration-1000" 
-                                style={{ 
-                                  width: `${Math.min((budgetAllocations.savings / parseFloat(goals.savingsGoal || 1)) * 100, 100)}%` 
-                                }}
-                              ></div>
-                            </div>
-                            <p className="text-xs text-gray-500 mt-1">
-                              {Math.min(Math.round((budgetAllocations.savings / parseFloat(goals.savingsGoal || 1)) * 100), 100)}% of monthly target
-                            </p>
-                          </div>
-                        )}
-
-                        {/* Time to Goal */}
-                        {goals.savingsGoal && budgetAllocations.savings > 0 && (
-                          <div className="p-4 bg-gradient-to-r from-purple-100 to-indigo-100 dark:from-purple-800 dark:to-indigo-800 rounded-lg">
-                            <p className="text-sm font-medium text-purple-800 dark:text-purple-200">
-                              Time to reach goal: {Math.ceil(parseFloat(goals.savingsGoal || 0) / budgetAllocations.savings)} months
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                  )}
                 </div>
               )}
             </div>
 
-            {/* Smart Recommendations */}
-            <div className={`${cardClasses} rounded-2xl shadow-xl p-8 border bg-gradient-to-br from-purple-50 to-orange-50 dark:from-purple-900 dark:to-orange-900`}>
-              <h3 className="text-2xl font-bold mb-6 text-purple-700 dark:text-purple-300">Smart Recommendations</h3>
-              <div className="grid lg:grid-cols-2 gap-6">
-                {budgetAllocations.savings / availableBudget < 0.2 && (
-                  <div className="flex items-start gap-3 p-4 bg-yellow-50 dark:bg-yellow-900 rounded-xl border-l-4 border-yellow-400">
-                    <AlertTriangle className="h-6 w-6 text-yellow-600 mt-0.5" />
-                    <div>
-                      <p className="font-semibold text-yellow-800 dark:text-yellow-200">Increase Your Savings</p>
-                      <p className="text-sm text-yellow-700 dark:text-yellow-300">Aim to save at least 20% of your income for a secure financial future.</p>
-                    </div>
+                    {/* Smart Recommendations - Only show when salary is entered */}
+        {salary && (
+          <div className={`${cardClasses} rounded-2xl shadow-xl p-8 border bg-gradient-to-br from-purple-50 to-orange-50 dark:from-purple-900 dark:to-orange-900`}>
+            <h3 className="text-2xl font-bold mb-6 text-purple-700 dark:text-purple-300">Smart Recommendations</h3>
+            <div className="grid lg:grid-cols-2 gap-6">
+              {budgetAllocations.savings / availableBudget < 0.2 && (
+                <div className="flex items-start gap-3 p-4 bg-yellow-50 dark:bg-yellow-900 rounded-xl border-l-4 border-yellow-400">
+                  <AlertTriangle className="h-6 w-6 text-yellow-600 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-yellow-800 dark:text-yellow-200">Increase Your Savings</p>
+                    <p className="text-sm text-yellow-700 dark:text-yellow-300">Aim to save at least 20% of your income for a secure financial future.</p>
                   </div>
-                )}
-                
-                {budgetAllocations.housing / availableBudget > 0.3 && (
-                  <div className="flex items-start gap-3 p-4 bg-orange-50 dark:bg-orange-900 rounded-xl border-l-4 border-orange-400">
-                    <Home className="h-6 w-6 text-orange-600 mt-0.5" />
-                    <div>
-                      <p className="font-semibold text-orange-800 dark:text-orange-200">High Housing Costs</p>
-                      <p className="text-sm text-orange-700 dark:text-orange-300">Your housing costs exceed 30%. Consider finding more affordable housing options.</p>
-                    </div>
+                </div>
+              )}
+              
+              {budgetAllocations.housing / availableBudget > 0.3 && (
+                <div className="flex items-start gap-3 p-4 bg-orange-50 dark:bg-orange-900 rounded-xl border-l-4 border-orange-400">
+                  <Home className="h-6 w-6 text-orange-600 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-orange-800 dark:text-orange-200">High Housing Costs</p>
+                    <p className="text-sm text-orange-700 dark:text-orange-300">Your housing costs exceed 30%. Consider finding more affordable housing options.</p>
                   </div>
-                )}
-                
-                {remainingBudget > availableBudget * 0.1 && (
-                  <div className="flex items-start gap-3 p-4 bg-green-50 dark:bg-green-900 rounded-xl border-l-4 border-green-400">
-                    <CheckCircle className="h-6 w-6 text-green-600 mt-0.5" />
-                    <div>
-                      <p className="font-semibold text-green-800 dark:text-green-200">Great Job!</p>
-                      <p className="text-sm text-green-700 dark:text-green-300">You have unallocated budget. Consider increasing your savings or investments.</p>
-                    </div>
+                </div>
+              )}
+              
+              {remainingBudget > availableBudget * 0.1 && (
+                <div className="flex items-start gap-3 p-4 bg-green-50 dark:bg-green-900 rounded-xl border-l-4 border-green-400">
+                  <CheckCircle className="h-6 w-6 text-green-600 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-green-800 dark:text-green-200">Great Job!</p>
+                    <p className="text-sm text-green-700 dark:text-green-300">You have unallocated budget. Consider increasing your savings or investments.</p>
                   </div>
-                )}
+                </div>
+              )}
 
-                {budgetAllocations.healthcare === 0 && (
-                  <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-900 rounded-xl border-l-4 border-red-400">
-                    <CheckCircle className="h-6 w-6 text-red-600 mt-0.5" />
-                    <div>
-                      <p className="font-semibold text-red-800 dark:text-red-200">Healthcare Budget Missing</p>
-                      <p className="text-sm text-red-700 dark:text-red-300">Consider allocating funds for healthcare and medical emergencies.</p>
-                    </div>
+              {budgetAllocations.healthcare === 0 && (
+                <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-900 rounded-xl border-l-4 border-red-400">
+                  <CheckCircle className="h-6 w-6 text-red-600 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-red-800 dark:text-red-200">Healthcare Budget Missing</p>
+                    <p className="text-sm text-red-700 dark:text-red-300">Consider allocating funds for healthcare and medical emergencies.</p>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
-          </>
+          </div>
         )}
       </main>
+      <Footer />
     </div>
   );
 };

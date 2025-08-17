@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar.jsx';
+import Footer from '../components/Footer.jsx';
+import heroimage from '../assets/heroimage.jpg';
 import { useAuth } from '../hooks/useAuth.js';
 
 // Loader Component
@@ -48,9 +50,10 @@ const HeroSection = ({ scrollToSection }) => {
   const { isAuthenticated, fullName } = useAuth();
   
   return (
-    <section className="h-screen relative bg-cover bg-center bg-no-repeat overflow-hidden" style={{
-      backgroundImage: "url('https://princewilliamlivingweb.s3-accelerate.amazonaws.com/2022/01/shutterstock_1025314012-scaled.jpg')"
-    }}>
+    <section
+      className="h-screen relative bg-cover bg-center bg-no-repeat overflow-hidden backdrop-blur-lg"
+      style={{ backgroundImage: `url(${heroimage})` }}
+    >
       <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-black/60 via-black/40 to-purple-900/60"></div>
       <div className="absolute top-0 left-0 w-full h-full">
         <div className="absolute top-20 right-20 w-32 h-32 bg-orange-500/20 rounded-full blur-3xl animate-pulse"></div>
@@ -257,36 +260,6 @@ const ContactSection = ({ isVisible }) => {
   );
 };
 
-// Footer Component
-const Footer = () => {
-  return (
-    <footer className="relative mt-20 overflow-hidden">
-      <div className="bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 p-12">
-        <div className="absolute top-0 left-0 w-full h-full">
-          <div className="absolute top-4 right-20 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
-          <div className="absolute bottom-4 left-20 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
-        </div>
-        <div className="relative max-w-6xl mx-auto text-center">
-          <div className="mb-6">
-            <h3 className="text-3xl font-bold text-white mb-2">धनसाथी</h3>
-            <div className="w-16 h-1 bg-white/50 mx-auto rounded-full"></div>
-          </div>
-          <p className="text-white text-xl font-medium mb-2">
-            &copy; 2025 Dhansathi. All Rights Reserved.
-          </p>
-          <div className="text-white/90 text-lg mb-6">
-            Empowering financial literacy for everyone
-          </div>
-          <div className="flex justify-center space-x-8 text-white/80">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-white transition-colors">Support</a>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-};
 
 // Main App Component
 const Home = () => {
@@ -358,7 +331,7 @@ const Home = () => {
       <Loader isVisible={showLoader} />
       
       {!showLoader && (
-        <div className="opacity-100 transition-opacity duration-1000 pt-20">
+        <div className="opacity-100 transition-opacity duration-1000">
           <Navbar 
             isScrolled={isScrolled}
             isMenuOpen={isMenuOpen}

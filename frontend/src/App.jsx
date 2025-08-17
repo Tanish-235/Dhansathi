@@ -5,7 +5,7 @@ import Tutorial from './pages/Tutorial.jsx'
 import BudgetPlanner from './pages/BudgetPlanner.jsx'
 import RegisterLoginPage from './pages/RegisterLoginPage.jsx'
 import SathiBot from './pages/SathiBot.jsx'
-import DhansathiResources from './pages/DhansathiResources.jsx'
+//import DhansathiResources from './pages/DhansathiResources.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 function App() {
@@ -29,11 +29,11 @@ function App() {
             <Tutorial />
           </ProtectedRoute>
         } />
-         <Route path="/resources" element={
+         {/* <Route path="/resources" element={
           <ProtectedRoute>
             <DhansathiResources />
           </ProtectedRoute>
-        } />
+        } /> */}
         
       </Routes>
     </Router>
