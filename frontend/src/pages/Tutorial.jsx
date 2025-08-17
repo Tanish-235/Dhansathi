@@ -63,9 +63,9 @@ const axios = {
   }
 };
 
-// Create axios instance
+// Create axios instance using VITE_API_URL
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api', // Change this to your backend URL
+  baseURL: `${import.meta.env.VITE_API_URL}/api`,
   headers: {
     'Content-Type': 'application/json',
   },
