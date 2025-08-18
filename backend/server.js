@@ -9,14 +9,16 @@ import mongoose from "mongoose";
 
 dotenv.config();
 
-const app = express();
-app.use(cors({
-    origin: "http://localhost:5173",
+const app = (cors({
+    origin: [
+      "http://localhost:5173",
+      "https://dhansathi.vercel.app"
+    ],
 }));
 
 app.use(express.json());
 
-app.use("/api/chat", chatRoutes);
+app.use("/api", chatRoutes);
 app.use("/api", tutRoutes);
 
 // Browser-friendly endpoints for testing

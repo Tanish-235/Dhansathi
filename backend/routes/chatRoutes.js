@@ -33,7 +33,7 @@ const cleanResponse = (text) => {
     .trim();
 };
 
-router.post("/", async (req, res) => {
+router.post("/chat", async (req, res) => {
   const { message } = req.body;
 
   console.log("Chat request received:", { message, hasApiKey: !!process.env.GROQ_API_KEY });
