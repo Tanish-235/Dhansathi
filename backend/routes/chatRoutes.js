@@ -33,51 +33,6 @@ const cleanResponse = (text) => {
     .trim();
 };
 
-// Test endpoint to verify API key
-router.get("/test", async (req, res) => {
-  if (!process.env.GROQ_API_KEY) {
-    return res.json({ 
-      status: "error", 
-      message: "GROQ_API_KEY not found in environment variables" 
-    });
-  }
-  
-  try {
-    const groq = new Groq({
-      apiKey: process.env.GROQ_API_KEY,
-    });
-
-    const chatCompletion = await groq.chat.completions.create({
-      messages: [
-        {
-          role: "user",
-          content: "Hello, this is a test message. Please respond with 'Test successful' if you can see this."
-        }
-      ],
-      model: "openai/gpt-oss-120b",
-      temperature: 0.7,
-      max_tokens: 100,
-      top_p: 1,
-      stream: false
-    });
-
-    const response = chatCompletion.choices[0]?.message?.content;
-    
-    res.json({ 
-      status: "success", 
-      message: "API key is working!",
-      response: response
-    });
-  } catch (error) {
-    console.error("Groq API test error:", error);
-    res.json({ 
-      status: "error", 
-      message: "API test failed",
-      error: error.message 
-    });
-  }
-});
-
 router.post("/", async (req, res) => {
   const { message } = req.body;
 

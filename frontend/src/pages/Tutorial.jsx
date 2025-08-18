@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import Footer from '../components/Footer';
 import { Plus, ExternalLink, BookOpen, Edit, Trash2, X } from 'lucide-react';
 
 // Axios configuration
@@ -45,12 +46,16 @@ const axios = {
         const responseData = await response.json();
         return { data: responseData, status: response.status };
       } catch (error) {
-        if (error.response) {
-          throw error;
+        // Check if it's a network error (fetch failed to connect)
+        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+          const networkError = new Error('Network Error');
+          networkError.code = 'NETWORK_ERROR';
+          networkError.message = 'Network Error';
+          throw networkError;
         }
-        const networkError = new Error('Network Error');
-        networkError.code = 'NETWORK_ERROR';
-        throw networkError;
+        
+        // Re-throw other errors
+        throw error;
       }
     };
     
@@ -63,9 +68,8 @@ const axios = {
   }
 };
 
-// Create axios instance using VITE_API_URL
 const api = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL}/api`,
+  baseURL: "http://localhost:5000/api",
   headers: {
     'Content-Type': 'application/json',
   },
@@ -88,19 +92,29 @@ const Tutorial = () => {
   // Fetch tutorials from backend
   const fetchTutorials = async () => {
     setLoading(true);
+    setError(''); // Clear previous errors
     try {
       const response = await api.get('/tutorials');
       // Ensure response.data is always an array
       const data = Array.isArray(response.data) ? response.data : [];
       setTutorials(data);
-      setError('');
     } catch (err) {
-      if (err.code === 'NETWORK_ERROR') {
-        setError('Failed to connect to server. Make sure your backend is running.');
-      } else {
-        setError(`Failed to load tutorials: ${err.response?.status || 'Unknown error'}`);
-      }
       console.error('Error fetching tutorials:', err);
+      
+      if (err.code === 'NETWORK_ERROR' || err.message?.includes('Network Error')) {
+        setError('Unable to connect to the server. Please check if the backend is running on http://localhost:5000');
+      } else if (err.response?.status === 404) {
+        setError('API endpoint not found. Please check the server configuration.');
+      } else if (err.response?.status >= 500) {
+        setError('Server error. Please try again later.');
+      } else if (err.response?.status >= 400) {
+        setError('Request failed. Please check your input.');
+      } else {
+        setError(`Failed to load tutorials: ${err.message || 'Unknown error'}`);
+      }
+      
+      // Set empty array to prevent undefined errors
+      setTutorials([]);
     } finally {
       setLoading(false);
     }
@@ -114,14 +128,17 @@ const Tutorial = () => {
       setError('');
       return true;
     } catch (err) {
-      if (err.code === 'NETWORK_ERROR') {
-        setError('Failed to connect to server. Check your backend connection.');
+      console.error('Error adding tutorial:', err);
+      
+      if (err.code === 'NETWORK_ERROR' || err.message?.includes('Network Error')) {
+        setError('Unable to connect to the server. Please check if the backend is running on http://localhost:5000');
       } else if (err.response?.status === 400) {
         setError('Invalid tutorial data. Please check all fields.');
+      } else if (err.response?.status >= 500) {
+        setError('Server error. Please try again later.');
       } else {
-        setError(`Failed to add tutorial: ${err.response?.status || 'Unknown error'}`);
+        setError(`Failed to add tutorial: ${err.message || 'Unknown error'}`);
       }
-      console.error('Error adding tutorial:', err);
       return false;
     }
   };
@@ -130,22 +147,24 @@ const Tutorial = () => {
   const updateTutorial = async (id, tutorialData) => {
     try {
       const response = await api.put(`/tutorials/${id}`, tutorialData);
-      // If backend returns the updated tutorial as response.data, update state accordingly
       setTutorials(prev => prev.map(t => t._id === id ? response.data : t));
       setError('');
       return true;
     } catch (err) {
-      if (err.code === 'NETWORK_ERROR') {
-        setError('Failed to connect to server.');
+      console.error('Error updating tutorial:', err);
+      
+      if (err.code === 'NETWORK_ERROR' || err.message?.includes('Network Error')) {
+        setError('Unable to connect to the server. Please check if the backend is running on http://localhost:5000');
       } else if (err.response?.status === 404) {
         setError('Tutorial not found. It may have been deleted.');
         fetchTutorials(); // Refresh the list
       } else if (err.response?.status === 400) {
         setError('Invalid tutorial data. Please check all fields.');
+      } else if (err.response?.status >= 500) {
+        setError('Server error. Please try again later.');
       } else {
-        setError(`Failed to update tutorial: ${err.response?.status || 'Unknown error'}`);
+        setError(`Failed to update tutorial: ${err.message || 'Unknown error'}`);
       }
-      console.error('Error updating tutorial:', err);
       return false;
     }
   };
@@ -162,15 +181,18 @@ const Tutorial = () => {
       setTutorials(prev => prev.filter(t => t._id !== id));
       setError('');
     } catch (err) {
-      if (err.code === 'NETWORK_ERROR') {
-        setError('Failed to connect to server.');
+      console.error('Error deleting tutorial:', err);
+      
+      if (err.code === 'NETWORK_ERROR' || err.message?.includes('Network Error')) {
+        setError('Unable to connect to the server. Please check if the backend is running on http://localhost:5000');
       } else if (err.response?.status === 404) {
         setError('Tutorial not found. It may have already been deleted.');
         fetchTutorials(); // Refresh the list
+      } else if (err.response?.status >= 500) {
+        setError('Server error. Please try again later.');
       } else {
-        setError(`Failed to delete tutorial: ${err.response?.status || 'Unknown error'}`);
+        setError(`Failed to delete tutorial: ${err.message || 'Unknown error'}`);
       }
-      console.error('Error deleting tutorial:', err);
     }
   };
 
@@ -237,32 +259,54 @@ const Tutorial = () => {
   };
 
   return (
+    <div>
     <div className="min-h-screen bg-gray-50 p-6">
-      {/* Back to Home Page Button - Top Left */}
-      <div className="fixed top-6 left-6 z-50">
-        <button
-          onClick={() => navigate('/')}
-          className="inline-flex items-center text-purple-600 hover:text-purple-800 font-semibold bg-white bg-opacity-80 px-4 py-2 rounded-xl shadow"
-        >
-          ← Back to Home Page
-        </button>
-      </div>
-  <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="bg-gradient-to-r from-purple-600 to-purple-800 rounded-3xl p-8 mb-8 text-white">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold mb-2 flex items-center justify-center gap-3">
-              <BookOpen size={40} />
-              Tutorial Manager - Dhansathi
-            </h1>
-            <p className="text-purple-100">Smart tutorial management for your learning journey</p>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => navigate('/')}
+              className="p-2 rounded-lg transition-all duration-200 hover:scale-105 hover:bg-purple-500/20 text-white mr-2"
+              title="Back to Home"
+            >
+              ←
+            </button>
+            <div className="text-center flex-1">
+              <h1 className="text-4xl font-bold mb-2 flex items-center justify-center gap-3">
+                <BookOpen size={40} />
+                Tutorial Manager - Dhansathi
+              </h1>
+              <p className="text-purple-100">Smart tutorial management for your learning journey</p>
+            </div>
           </div>
         </div>
 
         {/* Error Message */}
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-6">
-            {error}
+            <div className="flex justify-between items-start">
+              <div className="flex-1">
+                <div className="font-semibold mb-2">Error: {error}</div>
+                {error.includes('Unable to connect to the server') && (
+                  <div className="text-sm text-red-600 mt-2">
+                    <p className="mb-1">To resolve this issue:</p>
+                    <ol className="list-decimal list-inside space-y-1">
+                      <li>Make sure your backend server is running on port 5000</li>
+                      <li>Check if the server is accessible at http://localhost:5000</li>
+                      <li>Verify that CORS is properly configured</li>
+                      <li>Check the browser console for additional error details</li>
+                    </ol>
+                  </div>
+                )}
+              </div>
+              <button
+                onClick={fetchTutorials}
+                className="ml-4 bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg text-sm transition-colors"
+              >
+                Retry
+              </button>
+            </div>
           </div>
         )}
 
@@ -443,6 +487,8 @@ const Tutorial = () => {
           </div>
         )}
       </div>
+    </div>
+      <Footer />
     </div>
   );
 };

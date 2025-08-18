@@ -7,9 +7,7 @@ const Footer = () => {
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                     <div className="space-y-6">
                         <div className="flex items-center space-x-2">
-                            <div className="bg-gradient-to-r from-purple-500 to-orange-500 p-2 rounded-lg">
-                                <Banknote className="h-6 w-6 text-white" />
-                            </div>
+                            
                             <span className="text-xl font-bold">धनसाथी | Dhansathi</span>
                         </div>
                         <p className="text-gray-300 leading-relaxed">
@@ -60,7 +58,7 @@ const Footer = () => {
                                 <Mail className="h-5 w-5 text-purple-400 mt-1 flex-shrink-0" />
                                 <div>
                                     <div className="text-white font-semibold">Email</div>
-                                    <div className="text-gray-300">support@shaktifinance.in</div>
+                                    <div className="text-gray-300">support@dhansathi.in</div>
                                 </div>
                             </div>
                             <div className="flex items-start space-x-3">
