@@ -12,6 +12,10 @@ export const getTut = async (req, res) => {
 }
 
 export const addTut = async (req, res) => {
+    // console.log('Headers:', req.headers);
+    // console.log('Body:', req.body);
+
+    // console.log(req.body);
     const tut = req.body;
     if (!tut.title || !tut.description || !tut.url) {
         return res.status(400).json({ message: "Please provide all the fields" });

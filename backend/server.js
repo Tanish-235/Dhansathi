@@ -9,14 +9,19 @@ import mongoose from "mongoose";
 
 dotenv.config();
 
-const app = (cors({
+const app = express();
+
+
+
+app.use(express.json());
+
+
+app.use(cors({
     origin: [
       "http://localhost:5173",
-      "https://dhansathi.vercel.app"
     ],
 }));
 
-app.use(express.json());
 
 app.use("/api", chatRoutes);
 app.use("/api", tutRoutes);
