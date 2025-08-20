@@ -19,7 +19,6 @@ app.use(cors({
     credentials: true
 }));
 
-app.use(express.json());
 
 app.use("/api", chatRoutes);
 app.use("/api", tutRoutes);
