@@ -1,6 +1,7 @@
 import express from "express";
 import { Groq } from 'groq-sdk';
 import systemPrompt from "../config/aiPrompt.js";
+import { getChats } from "../controller/chatcontroller.js";
 
 const router = express.Router();
 
@@ -33,10 +34,10 @@ const cleanResponse = (text) => {
     .trim();
 };
 
-router.post("/chat", async (req, res) => {
-  const { message } = req.body;
+import Chat from "../model/chat.js";
 
-  console.log("Chat request received:", { message, hasApiKey: !!process.env.GROQ_API_KEY });
+router.post("/chat", async (req, res) => {
+  const { message, user = "guest" } = req.body;
 
   if (!message) {
     return res.status(400).json({ error: "Message is required" });
@@ -48,12 +49,10 @@ router.post("/chat", async (req, res) => {
   }
 
   try {
-    console.log("Making request to Groq API...");
-    
     const groq = new Groq({
       apiKey: process.env.GROQ_API_KEY,
     });
-    
+
     const chatCompletion = await groq.chat.completions.create({
       messages: [
         {
@@ -72,21 +71,24 @@ router.post("/chat", async (req, res) => {
       stream: false
     });
 
-    console.log("Groq API response received");
-    
     let reply = chatCompletion.choices[0]?.message?.content || "Sorry, I couldn't process that.";
-    
-    // Clean up the response formatting
     reply = cleanResponse(reply);
-    
-    console.log("Cleaned reply:", reply);
+
+    // Save chat to MongoDB
+    const chat = new Chat({
+      user,
+      message,
+      response: reply,
+    });
+    await chat.save();
 
     res.json({ reply });
   } catch (error) {
     console.error("Chat error details:", error);
-    console.error("Error stack:", error.stack);
     res.status(500).json({ error: "Something went wrong while processing your request" });
   }
 });
+
+router.get("/chats", getChats);
 
 export default router;
