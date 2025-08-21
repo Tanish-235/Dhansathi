@@ -91,9 +91,10 @@ Contributions are welcome! Feel free to fork this repo, open issues, or submit P
 <img width="1896" height="992" alt="image" src="https://github.com/user-attachments/assets/3eb42cdc-4485-4b86-8beb-6a400516d1dd" />
 <img width="1893" height="995" alt="image" src="https://github.com/user-attachments/assets/d5d64a6d-89b1-4eb0-9d4b-70d394a94d5f" />
 <img width="1890" height="999" alt="image" src="https://github.com/user-attachments/assets/0c7267a5-00e6-4bb5-9967-341780c90c67" />
-<img width="532" height="876" alt="image" src="https://github.com/user-attachments/assets/b4829407-6fde-4870-9788-aeb51879bd0c" />
-After exporting:
-<img width="614" height="543" alt="image" src="https://github.com/user-attachments/assets/60af9193-1a7d-4cc5-b12d-2696f87751d3" />
+<img width="1899" height="883" alt="image" src="https://github.com/user-attachments/assets/b0df2099-679e-4f55-aae1-3e9f33b4d4f8" />
+<img width="1895" height="994" alt="image" src="https://github.com/user-attachments/assets/2d556068-43bf-48b7-a974-16e769596e48" />
+
+
 
 
 
