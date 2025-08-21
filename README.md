@@ -84,3 +84,18 @@ Contributions are welcome! Feel free to fork this repo, open issues, or submit P
 - All open-source contributors who made this project possible  
 
 ---
+
+
+## O/p of the Project:
+
+<img width="1896" height="992" alt="image" src="https://github.com/user-attachments/assets/3eb42cdc-4485-4b86-8beb-6a400516d1dd" />
+<img width="1893" height="995" alt="image" src="https://github.com/user-attachments/assets/d5d64a6d-89b1-4eb0-9d4b-70d394a94d5f" />
+<img width="1890" height="999" alt="image" src="https://github.com/user-attachments/assets/0c7267a5-00e6-4bb5-9967-341780c90c67" />
+<img width="532" height="876" alt="image" src="https://github.com/user-attachments/assets/b4829407-6fde-4870-9788-aeb51879bd0c" />
+After exporting:
+<img width="614" height="543" alt="image" src="https://github.com/user-attachments/assets/60af9193-1a7d-4cc5-b12d-2696f87751d3" />
+
+
+
+
+
