@@ -3,7 +3,7 @@
 
 Dhansathi is a MERN stack project focused on **financial literacy and empowerment** for women in rural communities.  
 It provides easy-to-use tools and resources to help manage money, track expenses, and learn about financial independence.  
-The project emphasizes accessibility and security, ensuring users can safely engage with financial tools and resources.
+The project emphasizes accessibility and security, ensuring users can safely engage with financial tools and resources
 
 ---
 
