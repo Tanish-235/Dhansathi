@@ -29,7 +29,7 @@ const Loader = ({ isVisible }) => {
           <div className="w-16 h-1 bg-orange-500 rounded-full animate-pulse"></div>
         </div>
       </div>
-      <style jsx>{`
+      <style>{`
         @keyframes fadeInUp {
           from { 
             opacity: 0; 

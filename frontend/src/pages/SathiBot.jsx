@@ -70,7 +70,7 @@ const SathiBot = () => {
 
     try {
 
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/chat`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL_CHAT}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: trimmed })
