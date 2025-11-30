@@ -10,7 +10,7 @@ export const connectDB = async() => {
     catch(error) {
         console.log(`MongoDB connection error: ${error.message}`);
         // Don't exit process for now, just log the error
-        console.log("Continuing without database connection...");
+        console.log("Continuing without database connection.");
     }
 }
 

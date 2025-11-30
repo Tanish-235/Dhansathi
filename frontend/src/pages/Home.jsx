@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import heroimage from '../assets/heroimage.jpg';
-import { useAuth } from '../hooks/useAuth.js';
 
 // Loader Component
 const Loader = ({ isVisible }) => {
@@ -47,7 +46,6 @@ const Loader = ({ isVisible }) => {
 
 // Hero Section Component
 const HeroSection = ({ scrollToSection }) => {
-  const { isAuthenticated, fullName } = useAuth();
   
   return (
     <section
@@ -64,11 +62,9 @@ const HeroSection = ({ scrollToSection }) => {
           <h1 className="text-6xl md:text-7xl mb-4 font-extrabold bg-gradient-to-r from-white via-orange-200 to-white bg-clip-text text-transparent drop-shadow-2xl">
             Welcome to Dhansathi
           </h1>
-          {isAuthenticated && (
             <p className="text-2xl md:text-3xl mb-4 font-semibold text-orange-300 drop-shadow-lg">
-              Welcome back, {fullName}! 👋
+              Welcome back, User! 👋
             </p>
-          )}
           <div className="w-24 h-1 bg-gradient-to-r from-orange-400 to-orange-600 mx-auto rounded-full mb-6"></div>
         </div>
         <p className="text-xl md:text-2xl mb-10 max-w-3xl mx-auto font-light leading-relaxed text-gray-100">
